@@ -22,7 +22,7 @@ VERSION=$(shell cat VERSION)
 	git commit -m "version $(VERSION)"
 	git tag -a "$(VERSION)" -m "version $(VERSION)"
 	git push origin master
-	git push origin master --tags
+	git push origin master --tags -f
 
 	sudo docker tag $(USERNAME)/$(IMAGE):latest $(USERNAME)/$(IMAGE):$(VERSION)
 
