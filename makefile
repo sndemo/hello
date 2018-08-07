@@ -24,7 +24,7 @@ VERSION=$(shell cat VERSION)
 	git push origin master
 	git push origin master --tags
 
-	sudo docker tag $(USERNAME)/$(IMAGE):latest $(USERNAME)/$(IMAGE):$(version)
+	sudo docker tag $(USERNAME)/$(IMAGE):latest $(USERNAME)/$(IMAGE):$(VERSION)
 
 	# push it
 	sudo docker push $(USERNAME)/$(IMAGE):latest
