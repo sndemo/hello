@@ -20,7 +20,7 @@ VERSION=$(shell cat VERSION)
 
 	git add -A
 	git commit -m "version $(VERSION)"
-	git tag -a "$(VERSION)" -m "version $(VERSION)"
+	git tag -a "$(VERSION)" -m "version $(VERSION)" -f
 	git push origin master
 	git push origin master --tags -f
 
