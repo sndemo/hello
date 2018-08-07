@@ -4,6 +4,11 @@ IMAGE=hello
 .build:
 	sudo docker build -t ${USERNAME}/${IMAGE}:latest .
 
+.git-push:
+	git add *
+	git commit -m ${comment}
+	git push origin master
+
 .release:
 	git pull
 	# bump version
