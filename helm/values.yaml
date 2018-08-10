@@ -3,6 +3,6 @@ app:
   namespace: demo-hello
   ms:
     name: hello 
-    version: 1 
+    version: 'v1'
     replicas: 2 
     image: 'sndemo/hello'

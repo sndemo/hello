@@ -3,7 +3,7 @@ APP.NAMESPACE=demo-hello
 APP.MS.NAME=hello
 APP.MS.VERSION=$(shell cat version.txt)
 APP.MS.IMAGE=sndemo/hello
-RELEASE=APP.NAME+'.'+APP.MS.NAME
+RELEASE=$(APP.NAME).$(APP.MS.NAME)
 
 # Generate helm values.yaml contents
 define VALUES 
@@ -12,7 +12,7 @@ app:
   namespace: $(APP.NAMESPACE)
   ms:
     name: $(APP.MS.NAME) 
-    version: $(APP.MS.VERSION) 
+    version: '$(APP.MS.VERSION)'
     replicas: 2 
     image: '$(APP.MS.IMAGE)'
 endef
@@ -47,7 +47,7 @@ export VALUES
 	git push origin master --tags -f
 
 .release-docker-push:
-	sudo login -u sndemo
+	sudo docker login -u sndemo
 	sudo docker tag $(APP.MS.IMAGE):latest $(APP.MS.IMAGE):$(APP.MS.VERSION)
 
 	# push it
@@ -55,7 +55,7 @@ export VALUES
 	sudo docker push $(APP.MS.IMAGE):$(APP.MS.VERSION)
 
 .release-deploy:
-	kubectl create namespace $(APP.MS.NAMESPACE)
+	kubectl create namespace $(APP.NAMESPACE)
 	helm upgrade -i RELEASE ./helm
 
 .release: .echo .update-helm-values .release-build .release-docker-push .release-deploy
