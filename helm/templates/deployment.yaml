@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app.ms.name }}
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+  selector:
+    app: {{ .Values.app.name }}
+    ms: {{ .Values.app.ms.name }}
+    version: {{ .Values.app.ms.version }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.ms.name }}
+  namespace: {{ .Values.app.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+      ms: {{ .Values.app.ms.name }}
+      version: {{ .Values.app.ms.version }}
+  replicas: {{ .Values.app.ms.replicas }} 
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }} 
+        ms: {{ .Values.app.ms.name }}
+        version: {{ .Values.app.ms.version }}
+    spec:
+      containers:
+      - name: {{ .Values.app.ms.name }}
+        image: {{ .Values.app.ms.image }}:{{ .Values.app.ms.version }} 
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: HOST 
+            value: 0.0.0.0
+          - name: PORT 
+            value: "80"
+          - name: SERVICE_NAME
+            value: {{ .Values.app.ms.name }}
+          - name: VERSION
+            value: {{ .Values.app.ms.version }}
+          - name: NAME_URL
+            value: http://name/name 
+          - name: PHONE_URL
+            value: http://phone/phone 
+        ports:
+        - containerPort: 80

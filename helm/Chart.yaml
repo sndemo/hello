@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart for hello mS 
+name: hello
+version: 0.1.0

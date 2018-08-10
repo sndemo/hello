@@ -1,0 +1,8 @@
+app:
+  name: hello 
+  namespace: demo-hello
+  ms:
+    name: hello 
+    version: 1 
+    replicas: 2 
+    image: 'sndemo/hello'
