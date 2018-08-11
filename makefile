@@ -70,6 +70,7 @@ endif
 	helm install --debug --dry-run --name=test ./helm | sed -n '/---/,$$p' > helm/templates/temp.yaml
 	$(RM) helm/templates/deployment.yaml
 	istioctl kube-inject -f helm/templates/temp.yaml > helm/templates/deployment.yaml
+	$(RM) helm/templates/temp.yaml
 
 	helm upgrade -i $(RELEASE) ./helm --namespace $(APP.NAMESPACE)
 
