@@ -1,8 +1,8 @@
 app:
   name: hello 
-  namespace: demo-hello
+  namespace: hello-t1
   ms:
     name: hello 
-    version: 'v1'
+    version: 'v2'
     replicas: 2 
     image: 'sndemo/hello'

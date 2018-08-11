@@ -1,9 +1,11 @@
+TENANT=t1
 APP.NAME=hello
-APP.NAMESPACE=demo-hello
+APP.NAMESPACE=$(APP.NAME)-$(TENANT)
 APP.MS.NAME=hello
 APP.MS.VERSION=$(shell cat version.txt)
 APP.MS.IMAGE=sndemo/hello
 RELEASE=$(APP.NAME).$(APP.MS.NAME)
+NAMESPACE_STATUS=$(shell kubectl get namespace $(APP.NAMESPACE) -o=jsonpath='{.status.phase}' 2>>/dev/null)
 
 # Generate helm values.yaml contents
 define VALUES 
@@ -18,6 +20,11 @@ app:
 endef
 
 export VALUES
+
+
+ifneq ($(NAMESPACE_STATUS),Active)
+	CREATE_NAMESPACE=kubectl create namespace $(APP.NAMESPACE)
+endif
 
 .echo:
 	echo "APP.NAME=$(APP.NAME)"
@@ -55,7 +62,15 @@ export VALUES
 	sudo docker push $(APP.MS.IMAGE):$(APP.MS.VERSION)
 
 .release-deploy:
-	kubectl create namespace $(APP.NAMESPACE)
-	helm upgrade -i RELEASE ./helm
+	$(CREATE_NAMESPACE)
+
+	# this is workaround as manual sidecar inject of istio does not support helm
+	$(RM) helm/templates/*
+	cp helm/tmpls/deployment.yaml helm/templates/
+	helm install --debug --dry-run --name=test ./helm | sed -n '/---/,$$p' > helm/templates/temp.yaml
+	$(RM) helm/templates/deployment.yaml
+	istioctl kube-inject -f helm/templates/temp.yaml > helm/templates/deployment.yaml
+
+	helm upgrade -i $(RELEASE) ./helm --namespace $(APP.NAMESPACE)
 
 .release: .echo .update-helm-values .release-build .release-docker-push .release-deploy
