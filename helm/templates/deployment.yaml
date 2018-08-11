@@ -12,7 +12,6 @@ spec:
   selector:
     app: hello
     ms: hello
-    version: v2
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -25,7 +24,6 @@ spec:
     matchLabels:
       app: hello
       ms: hello
-      version: v2
   strategy: {}
   template:
     metadata:
@@ -35,7 +33,7 @@ spec:
       labels:
         app: hello
         ms: hello
-        version: v2
+        version: v3
     spec:
       containers:
       - env:
@@ -46,12 +44,12 @@ spec:
         - name: SERVICE_NAME
           value: hello
         - name: VERSION
-          value: v2
+          value: v3
         - name: NAME_URL
           value: http://name/name
         - name: PHONE_URL
           value: http://phone/phone
-        image: sndemo/hello:v2
+        image: sndemo/hello:v3
         imagePullPolicy: IfNotPresent
         name: hello
         ports:
