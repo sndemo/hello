@@ -3,7 +3,7 @@ APP.NAME=hello
 APP.NAMESPACE=$(APP.NAME)-$(TENANT)
 APP.MS.NAME=hello
 APP.MS.VERSION=$(shell cat version.txt)
-APP.MS.IMAGE=sndemo/hello
+APP.MS.IMAGE=sndemo/$(APP.MS.NAME)
 RELEASE=$(APP.NAME).$(APP.MS.NAME)
 NAMESPACE_STATUS=$(shell kubectl get namespace $(APP.NAMESPACE) -o=jsonpath='{.status.phase}' 2>>/dev/null)
 
