@@ -47,7 +47,7 @@ endif
 
 	sudo docker build -t $(APP.MS.IMAGE):latest .
 
-	git add * 
+	git add -A 
 	git commit -m "version $(APP.MS.VERSION)"
 	git tag -a "$(APP.MS.VERSION)" -m "version $(APP.MS.VERSION)" -f
 	git push origin master
