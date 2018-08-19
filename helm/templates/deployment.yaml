@@ -16,7 +16,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   name: hello
 spec:
   replicas: 2
@@ -29,7 +28,6 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"55ca84b79cb5036ec3e54a3aed83cd77973cdcbed6bf653ff7b4f82659d68b1e","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
-      creationTimestamp: null
       labels:
         app: hello
         ms: hello
