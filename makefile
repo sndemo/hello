@@ -72,6 +72,6 @@ endif
 	istioctl kube-inject -f helm/templates/temp.yaml > helm/templates/deployment.yaml
 	$(RM) helm/templates/temp.yaml
 
-	helm upgrade -i $(RELEASE) ./helm --namespace $(APP.NAMESPACE)
+	#helm upgrade -i $(RELEASE) ./helm --namespace $(APP.NAMESPACE)
 
 .release: .echo .update-helm-values .release-build .release-docker-push .release-deploy
