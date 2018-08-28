@@ -39,19 +39,12 @@ endif
 	
 
 .release-build:
-	git pull
-	
 	echo "version: $(APP.MS.VERSION)"
 	#replace version in version file if APP.MS.VERSION variable is passed in  make commad e.g. 'make .release APP.MS.VERSION=1.0.2'
 	sed -i -e 's/.*$$/$(APP.MS.VERSION)/g' version.txt 
 
 	sudo docker build -t $(APP.MS.IMAGE):latest .
 
-	git add -A 
-	git commit -m "version $(APP.MS.VERSION)"
-	git tag -a "$(APP.MS.VERSION)" -m "version $(APP.MS.VERSION)" -f
-	git push origin master
-	git push origin master --tags -f
 
 .release-docker-push:
 	sudo docker login -u sndemo
@@ -61,7 +54,7 @@ endif
 	sudo docker push $(APP.MS.IMAGE):latest
 	sudo docker push $(APP.MS.IMAGE):$(APP.MS.VERSION)
 
-.release-deploy:
+.release-helm-build:
 	$(CREATE_NAMESPACE)
 
 	# this is workaround as manual sidecar inject of istio does not support helm
@@ -71,7 +64,18 @@ endif
 	$(RM) helm/templates/deployment.yaml
 	istioctl kube-inject -f helm/templates/temp.yaml > helm/templates/deployment.yaml
 	$(RM) helm/templates/temp.yaml
+	
+	#comment creationTimestamp as it causes problem in argocd
+	sed -i 's/creationTimestamp/#creationTimestamp/g' helm/templates/deployment.yaml
 
 	#helm upgrade -i $(RELEASE) ./helm --namespace $(APP.NAMESPACE)
 
-.release: .echo .update-helm-values .release-build .release-docker-push .release-deploy
+.release-git-tag:
+	git pull
+	git add -A
+	git commit -m "version $(APP.MS.VERSION)"
+	git tag -a "$(APP.MS.VERSION)" -m "version $(APP.MS.VERSION)" -f
+	git push origin master
+	git push origin master --tags -f
+
+.release: .echo .update-helm-values .release-build .release-docker-push .release-helm-build .release-git-tag

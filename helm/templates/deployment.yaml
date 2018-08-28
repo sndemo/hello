@@ -16,6 +16,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  #creationTimestamp: null
   name: hello
 spec:
   replicas: 2
@@ -28,10 +29,11 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"55ca84b79cb5036ec3e54a3aed83cd77973cdcbed6bf653ff7b4f82659d68b1e","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
+      #creationTimestamp: null
       labels:
         app: hello
         ms: hello
-        version: v4
+        version: v5
     spec:
       containers:
       - env:
@@ -42,12 +44,12 @@ spec:
         - name: SERVICE_NAME
           value: hello
         - name: VERSION
-          value: v4
+          value: v5
         - name: NAME_URL
           value: http://name/name
         - name: PHONE_URL
           value: http://phone/phone
-        image: sndemo/hello:v4
+        image: sndemo/hello:v5
         imagePullPolicy: IfNotPresent
         name: hello
         ports:
