@@ -38,7 +38,7 @@ podTemplate(
 			checkout([$class: 'GitSCM', 
 				branches: [[name: '*/master']], 
 				doGenerateSubmoduleConfigurations: false, 
-				extensions: [[$class: 'CleanCheckout'],[$class: 'RelativeTargetDirectory', relativeTargetDir: 'helm']], 
+				extensions: [[$class: 'CleanCheckout'],[$class: 'RelativeTargetDirectory', relativeTargetDir: 'install']], 
 				submoduleCfg: [], 
 				userRemoteConfigs: [[credentialsId: "${params.HelmCredId}", url: 'https://bitbucket.org/hclswz/devops-mgmt.git']]
 			])
@@ -59,7 +59,7 @@ podTemplate(
         stage ('Deploy') {
             container ('helm') {
                 sh "helm init --client-only --skip-refresh"
-                sh "helm upgrade --install --namespace ${params.NameSpace} --wait --set service.name=${params.AppName},image.repository=${params.RegistryURL}${params.AppName},image.tag=${env.BUILD_NUMBER} ${params.AppName} helm/base/install/helm"
+                sh "helm upgrade --install --namespace ${params.NameSpace} --wait --set service.name=${params.AppName},image.repository=${params.RegistryURL}${params.AppName},image.tag=${env.BUILD_NUMBER} ${params.AppName} install/base/install/helm"
 			}
         }
     }
