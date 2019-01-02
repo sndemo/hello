@@ -1,4 +1,4 @@
 env:
-  - SERVICE_NAME: "hello"
-  - PHONE_URL: "phone"
-  - NAME_URL: "name"
+  - SERVICE_NAME: hello
+  - PHONE_URL: phone
+  - NAME_URL: name

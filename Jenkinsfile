@@ -45,7 +45,7 @@ podTemplate(
 			sh 'ls -ltr'
         }
 		stage ('UnitTest') {
-		    sh 'sleep 1m'
+		    sh 'sleep 15s'
 		}
         def repository
         stage ('Docker') {
