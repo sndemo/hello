@@ -35,8 +35,6 @@ router.get("/hello", function (req, res) {
 
   var pname = external(req, res, NAME_URL); 
   var pphone = external(req, res, PHONE_URL); 
-  console.log("pname :" + pname);
-  console.log("pphone :" + pphone);
   Promise.all([pname, pphone]).then(values => { 
       data.name = values[0];
       data.phone = values[1];
@@ -65,6 +63,32 @@ function external(ireq, ires, url){
     }
 }
 
+var initJaegerTracer = require("jaeger-client").initTracer;
+
+function initTracer(serviceName) {
+  var config = {
+    serviceName: serviceName,
+    sampler: {
+      type: "const",
+      param: 1,
+    },
+    reporter: {
+      logSpans: true,
+    },
+  };
+  var options = {
+    logger: {
+      info: function logInfo(msg) {
+        console.log("INFO ", msg);
+      },
+      error: function logError(msg) {
+        console.log("ERROR", msg);
+      },
+    },
+  };
+  return initJaegerTracer(config, options);
+}
+
 function getJaegerHeaders(req) {
   var headers = { 
       'x-request-id': req.header('x-request-id'),
@@ -75,6 +99,8 @@ function getJaegerHeaders(req) {
       'x-b3-flags': req.header('x-b3-flags'),
       'x-ot-span-context': req.header('x-ot-span-context')
   }
+  console.log(req.headers());
+  console.log(headers);
   return headers;
 }
 
