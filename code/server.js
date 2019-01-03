@@ -2,6 +2,7 @@
 
 const express = require('express');
 const request = require('request');
+const util = require('util')
 
 var PORT = process.env.PORT || 8080;
 var HOST = process.env.HOST || '0.0.0.0';
