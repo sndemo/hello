@@ -2,7 +2,6 @@
 
 const express = require('express');
 const request = require('request');
-const util = require('util')
 
 var PORT = process.env.PORT || 8080;
 var HOST = process.env.HOST || '0.0.0.0';
@@ -12,6 +11,29 @@ var NAME_URL = process.env.NAME_URL || 'Unknown';
 var PHONE_URL = process.env.PHONE_URL || 'Unknown';
 
 var bodyParser = require('body-parser');
+
+var initTracer = require('jaeger-client').initTracer;
+var config = {
+    serviceName: process.env.SERVICE_NAME,
+    sampler: {
+      type: "const",
+      param: 1,
+    },
+    reporter: {
+      logSpans: true,
+    },
+  };
+var options = {
+    logger: {
+      info: function logInfo(msg) {
+        console.log("INFO ", msg);
+      },
+      error: function logError(msg) {
+        console.log("ERROR", msg);
+      },
+    },
+  };
+var tracer = initTracer(config, options);
 
 var app = express();
 var router = express.Router();
@@ -61,32 +83,6 @@ function external(ireq, ires, url){
           });
       });
     }
-}
-
-var initJaegerTracer = require("jaeger-client").initTracer;
-
-function initTracer(serviceName) {
-  var config = {
-    serviceName: serviceName,
-    sampler: {
-      type: "const",
-      param: 1,
-    },
-    reporter: {
-      logSpans: true,
-    },
-  };
-  var options = {
-    logger: {
-      info: function logInfo(msg) {
-        console.log("INFO ", msg);
-      },
-      error: function logError(msg) {
-        console.log("ERROR", msg);
-      },
-    },
-  };
-  return initJaegerTracer(config, options);
 }
 
 function getJaegerHeaders(req) {
