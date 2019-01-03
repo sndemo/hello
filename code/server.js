@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 router.get("/", function(req, res) {
-  res.status(200).send("Welcome to hello world service. I am running on version="+VERSION);
+  res.status(200).send("Welcome to hello world service. I am running on version = "+VERSION);
 });
 
 router.get("/hello", function (req, res) {
