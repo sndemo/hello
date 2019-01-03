@@ -99,8 +99,6 @@ function getJaegerHeaders(req) {
       'x-b3-flags': req.header('x-b3-flags'),
       'x-ot-span-context': req.header('x-ot-span-context')
   }
-  console.log(req.headers());
-  console.log(headers);
   return headers;
 }
 
