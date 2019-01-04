@@ -13,29 +13,6 @@ var PHONE_URL = process.env.PHONE_URL || 'Unknown';
 
 var bodyParser = require('body-parser');
 
-var initTracer = require('jaeger-client').initTracer;
-var config = {
-    serviceName: process.env.SERVICE_NAME,
-    sampler: {
-      type: "const",
-      param: 1,
-    },
-    reporter: {
-      logSpans: true,
-    },
-  };
-var options = {
-    logger: {
-      info: function logInfo(msg) {
-        console.log("INFO ", msg);
-      },
-      error: function logError(msg) {
-        console.log("ERROR", msg);
-      },
-    },
-  };
-var tracer = initTracer(config, options);
-
 var app = express();
 var router = express.Router();
 
