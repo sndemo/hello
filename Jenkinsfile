@@ -4,6 +4,7 @@ parameters {
 	string(defaultValue: '80', description: '', name: 'AppPort')
 	string(defaultValue: 'micro-system', description: '', name: 'NameSpace')
 	string(defaultValue: 'helm-cred-repo-id', description: '', name: 'HelmCredId')
+	string(defaultValue: 'hcl', description: '', name: 'Identifier')
 }
 podTemplate(
     label: 'mypod', 
@@ -59,7 +60,7 @@ podTemplate(
         stage ('Deploy') {
             container ('helm') {
                 sh "helm init --client-only --skip-refresh"
-                sh "helm upgrade --install --namespace ${params.NameSpace} --wait --set service.port=${params.AppPort},service.name=${params.AppName},image.repository=${params.RegistryURL}${params.AppName},image.tag=${env.BUILD_NUMBER} ${params.AppName} install/base/install/helm -f Values.yaml"
+                sh "helm upgrade --install --namespace ${params.NameSpace} --wait --set service.identifier=${params.Identifier},service.port=${params.AppPort},service.name=${params.AppName},image.repository=${params.RegistryURL}${params.AppName},image.tag=${env.BUILD_NUMBER} ${params.AppName} install/base/install/helm -f Values.yaml"
 			}
         }
     }
