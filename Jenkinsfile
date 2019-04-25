@@ -69,7 +69,7 @@ podTemplate(
 		    withDockerRegistry([url: ""]) {
 			   sh "docker login -u hclcloudworks -p cwhcl@123" 
                            sh "docker rmi -f hclcloudworks/cloudworks:${params.Identifier}.${params.AppName}.${env.BUILD_NUMBER}"
-			   sh "docker rmi $(docker images -f \"dangling=true\" -q)" 
+			   sh "docker rmi \$(docker images -f \"dangling=true\" -q)" 
                     }
             }
 	}
