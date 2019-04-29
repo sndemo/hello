@@ -63,16 +63,7 @@ podTemplate(
                 sh "helm init --client-only --skip-refresh"
                 sh "helm upgrade --install --namespace ${params.NameSpace} --wait --set service.identifier=${params.Identifier},service.port=${params.AppPort},service.name=${params.AppName},image.repository=hclcloudworks/cloudworks,image.tag=${params.Identifier}.${params.AppName}.${env.BUILD_NUMBER} ${params.AppName} install/base/install/helm -f Values.yaml"
 	    }
-        }
-	stage('Remove Unused docker image') {
-            container ('docker'){
-		    withDockerRegistry([url: ""]) {
-			   sh "docker login -u hclcloudworks -p cwhcl@123" 
-                           sh "docker rmi -f hclcloudworks/cloudworks:${params.Identifier}.${params.AppName}.${env.BUILD_NUMBER}"
-			   sh "docker rmi \$(docker images -f \"dangling=true\" -q)" 
-                    }
-            }
-	}
+        }	
     }
 	
 }
