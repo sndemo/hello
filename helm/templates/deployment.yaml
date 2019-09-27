@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.app.ms.name }}
+  name: {{ .Values.app.name }}
 spec:
   ports:
   - name: http
@@ -10,29 +10,26 @@ spec:
     protocol: TCP
   selector:
     app: {{ .Values.app.name }}
-    ms: {{ .Values.app.ms.name }}
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.app.ms.name }}
+  name: {{ .Values.app.name }}-{{ .Values.app.version }}
 spec:
   selector:
     matchLabels:
       app: {{ .Values.app.name }}
-      ms: {{ .Values.app.ms.name }}
-  replicas: {{ .Values.app.ms.replicas }} 
+  replicas: {{ .Values.app.replicas }} 
   template:
     metadata:
       labels:
         app: {{ .Values.app.name }} 
-        ms: {{ .Values.app.ms.name }}
-        version: {{ .Values.app.ms.version }}
+        version: {{ .Values.app.version }}
     spec:
       containers:
-      - name: {{ .Values.app.ms.name }}
-        image: {{ .Values.app.ms.image }}:{{ .Values.app.ms.version }} 
+      - name: {{ .Values.app.name }}
+        image: {{ .Values.app.image }}:{{ .Values.app.version }} 
         imagePullPolicy: IfNotPresent
         env:
           - name: HOST 
@@ -40,9 +37,9 @@ spec:
           - name: PORT 
             value: "80"
           - name: SERVICE_NAME
-            value: {{ .Values.app.ms.name }}
+            value: {{ .Values.app.name }}
           - name: VERSION
-            value: {{ .Values.app.ms.version }}
+            value: {{ .Values.app.version }}
           - name: NAME_URL
             value: http://name/name 
           - name: PHONE_URL
