@@ -1,6 +1,6 @@
 app:
   name: hello 
   namespace: hello
-  version: 'v2'
+  version: 'v1'
   replicas: 2 
   image: 'sndemo/hello'
