@@ -26,6 +26,7 @@ router.get("/", function(req, res) {
 });
 
 router.get("/hello", function (req, res) {
+  console.log('Request Headers = ' + getJaegerHeaders(req));
   var data = {
     'version': VERSION,
     'service_name': SERVICE_NAME,
